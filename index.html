@@ -110,14 +110,14 @@ h2{margin:0 0 4px;font-size:24px;letter-spacing:-.025em}.results-title p{margin:
     <h2 class="step-title"><span class="step">3</span> Votre suite d'accords</h2>
     <label class="field" for="progression" id="input-label">Accords entendus sur le standard</label>
     <textarea id="progression" aria-describedby="notation-hint" spellcheck="false" autocomplete="off" autocapitalize="off">C Am F G7</textarea>
-    <p class="hint" id="notation-hint">Saisissez C Am F G7. Appuyez sur Entrée pour créer une nouvelle ligne, reproduite dans les résultats. Le symbole | sépare les mesures.</p>
+    <p class="hint" id="notation-hint">Les noms indiquent toujours des positions apprises sur le standard, y compris sur baryton. Saisissez C Am F G7. Appuyez sur Entrée pour créer une nouvelle ligne, reproduite dans les résultats. Le symbole | sépare les mesures.</p>
     <div class="quick"><span class="label">Exemples</span><button type="button" data-sequence="C Am F G7">C · Am · F · G7</button><button type="button" data-sequence="G D Em C">G · D · Em · C</button><button type="button" data-sequence="F Dm | Bb C7">F · Dm | Bb · C7</button></div>
     <div class="builder"><p class="builder-title">Ajouter rapidement un accord</p><div class="builder-line"><select id="root" aria-label="Note de l'accord"><option>C</option><option>C#</option><option>Db</option><option>D</option><option>Eb</option><option>E</option><option>F</option><option>F#</option><option>Gb</option><option>G</option><option>Ab</option><option>A</option><option>Bb</option><option>B</option></select><select id="quality" aria-label="Type d'accord"><option value="">Majeur</option><option value="m">Mineur</option><option value="7">Septième</option><option value="m7">Mineur 7</option><option value="maj7">Majeur 7</option><option value="sus2">Sus2</option><option value="sus4">Sus4</option><option value="dim">Diminué</option><option value="aug">Augmenté</option><option value="6">Sixième</option><option value="m6">Mineur 6</option><option value="add9">Add9</option><option value="9">Neuvième</option><option value="7sus4">7sus4</option><option value="dim7">Dim7</option><option value="m7b5">Demi-diminué</option></select><button class="primary" type="button" id="add">+ Ajouter</button></div><div class="builder-bottom"><button class="text-button" type="button" id="add-measure">+ Barre de mesure |</button><button class="text-button" type="button" id="clear">Effacer</button></div></div>
   </section>
  </div>
  <section class="summary" aria-label="Progression convertie"><div><p class="summary-top" id="summary-title">POSITIONS DU STANDARD À REPRODUIRE SUR LE BARYTON</p><div class="summary-text" id="converted" aria-live="polite"></div><p class="summary-context" id="summary-context">Les accords entendus restent : C · Am · F · G7.</p></div><div class="summary-actions"><button type="button" class="primary" id="copy">Copier les positions</button><button type="button" class="text-button" id="print">Imprimer</button><span class="status" id="copy-status" role="status" aria-live="polite"></span></div></section>
  <div class="warning" id="warning" role="alert" hidden></div>
- <section class="results" aria-labelledby="results-title"><div class="results-title"><div><h2 id="results-title">Les positions, côte à côte</h2><p id="description">À gauche, la position de départ. À droite, la position à reproduire, nommée comme sur un ukulélé standard.</p></div><div class="legend">● Case appuyée · ○ Corde à vide · × Corde muette</div></div><div class="cards" id="cards" aria-live="polite"></div><p class="footnote">Les schémas montrent les cordes de gauche à droite (standard : G–C–E–A ; baryton : D–G–B–E). Le nom « Position F » signifie : reproduisez le doigté de F appris sur le standard. Les formes montrées sont des doigtés possibles, parfois différents des formes habituelles. Un accordage standard avec sol aigu ou sol grave modifie les octaves, pas les noms des accords. Pour les accords avec basse indiquée (ex. C/E), les noms sont convertis mais aucun diagramme d'inversion n'est garanti.</p></section>
+ <section class="results" aria-labelledby="results-title"><div class="results-title"><div><h2 id="results-title">Les positions, côte à côte</h2><p id="description">À gauche, la position de départ. À droite, la position à reproduire, nommée comme sur un ukulélé standard.</p></div><div class="legend">● Case appuyée · ○ Corde à vide · × Corde muette</div></div><div class="cards" id="cards" aria-live="polite"></div><p class="footnote">Les noms saisis désignent les positions apprises sur le standard, quel que soit l’instrument de départ. Les schémas montrent les cordes de gauche à droite (standard : G–C–E–A ; baryton : D–G–B–E). Le nom « Position F » signifie : reproduisez le doigté de F appris sur le standard. Les formes montrées sont des doigtés possibles, parfois différents des formes habituelles. Un accordage standard avec sol aigu ou sol grave modifie les octaves, pas les noms des accords. Pour les accords avec basse indiquée (ex. C/E), les noms sont convertis mais aucun diagramme d'inversion n'est garanti.</p></section>
 </main>
 <footer class="shell footer">Accord / Bar · Une application HTML autonome qui fonctionne hors connexion.</footer>
 <script>
@@ -174,11 +174,12 @@ function convert(token,index){
  if(token==='|')return {kind:'measure',raw:token,index};
  const c=parse(token);if(!c)return {kind:'bad',raw:token,index};
  const source=direction,target=source==='standard'?'baryton':'standard';
- // Mode « accord » : l'entrée est le SON attendu sur l'instrument de départ.
- // Mode « position » : l'entrée est le NOM DU DOIGTÉ appris sur le standard,
- // même si l'instrument de départ est un baryton.
- const sourceRoot=objective==='sound'?c.root:transpose(c.root,source==='baryton'?-5:0);
- const sourceBass=c.bass?(objective==='sound'?c.bass:transpose(c.bass,source==='baryton'?-5:0)):null;
+ // Dans les DEUX sens, les noms saisis sont ceux des positions apprises sur le standard.
+ // Ainsi « C » joué sur baryton signifie le doigté 0-0-0-3, qui SONNE G.
+ // Mode « même accord entendu » : on conserve le son de la position source.
+ // Mode « même position » : on conserve les cases, le son est celui de la cible.
+ const sourceRoot=transpose(c.root,source==='baryton'?-5:0);
+ const sourceBass=c.bass?transpose(c.bass,source==='baryton'?-5:0):null;
  const outRoot=objective==='sound'?sourceRoot:transpose(c.root,target==='baryton'?-5:0);
  const outBass=c.bass?(objective==='sound'?sourceBass:transpose(c.bass,target==='baryton'?-5:0)):null;
  const sourceHeard=name(c,sourceRoot,sourceBass),result=name(c,outRoot,outBass);
@@ -277,15 +278,15 @@ function updateIntro(){
  $('direction-stb').setAttribute('aria-pressed',String(stb));$('direction-bts').setAttribute('aria-pressed',String(!stb));
  $('objective-sound').setAttribute('aria-pressed',String(same));$('objective-shape').setAttribute('aria-pressed',String(!same));
  const src=stb?'standard':'baryton',dest=stb?'baryton':'standard';
- $('input-label').textContent=same?'Accords que vous souhaitez entendre sur le '+src:'Noms des positions que vous connaissez sur le standard';
+ $('input-label').textContent='Positions que vous jouez sur le '+src+' (noms du standard)';
  $('summary-title').textContent=same
-  ?'POSITIONS DU STANDARD À REPRODUIRE SUR LE '+dest.toUpperCase()
+  ?'POSITIONS À REPRODUIRE SUR LE '+dest.toUpperCase()+' (NOMS DU STANDARD)'
   :'ACCORDS ENTENDUS SUR LE '+dest.toUpperCase();
  $('copy').textContent=same?'Copier les positions':'Copier les accords';
  $('description').textContent='À gauche : position sur le '+src+'. À droite : position sur le '+dest+'. Chaque position porte le nom du doigté tel que vous le connaissez sur le standard.';
  const example=stb
    ?(same?'Pour entendre C sur le baryton, jouez la position F du standard : cases 2 · 0 · 1 · 0.':'Jouez la position C sur le standard : elle sonne C. Sur le baryton, les mêmes cases produisent G.')
-   :(same?'Pour entendre C sur le standard, jouez la position C. Sur le baryton, ce même C s’obtient avec la position F du standard.':'Jouez la position C sur le baryton : elle sonne G. Sur le standard, les mêmes cases produisent C.');
+   :(same?'Sur le baryton, la position C du standard sonne G. Pour entendre G sur le standard, jouez la position G : cases 0 · 2 · 3 · 2.':'Jouez la position C sur le baryton : elle sonne G. Sur le standard, les mêmes cases produisent C.');
  $('mode-explanation').textContent=example;
 }
 function render(){
