@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#19372f">
+<meta name="description" content="Pour chaque accord, retrouvez la position connue du ukulélé standard à jouer sur le baryton, et vice-versa. Diagrammes, progressions et conversion dans les deux sens.">
+<title>Accord / Bar | Trouver la position standard à jouer</title>
+<style>
+:root{--bg:#f5f6f3;--surface:#fff;--ink:#19312d;--muted:#667a73;--line:#dce6df;--green:#116b59;--green2:#0e5145;--soft:#e9f5ee;--navy:#19372f;--red:#ab473d;--amber:#f5e4d3;--radius:19px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--ink);background:var(--bg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.45}
+button,input,select,textarea{font:inherit}button{cursor:pointer}button:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #e2b46c;outline-offset:2px}
+[hidden]{display:none!important}
+.shell{width:min(1180px,calc(100% - 40px));margin:auto}
+.hero{background:var(--navy);color:#fff;padding:18px 0 42px}
+.brand{display:flex;gap:10px;align-items:center;font-weight:800;font-size:15px;letter-spacing:.02em}
+.brandmark{font:700 22px Georgia,serif;display:grid;place-items:center;border:1px solid #728c7c;border-radius:11px;width:40px;height:40px;color:#d4dec0}
+.kicker{color:#bcd5c2;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:750}
+.hero-inner{display:flex;align-items:end;justify-content:space-between;gap:15px;padding-top:23px}
+h1{font:normal clamp(32px,4.5vw,52px)/1.08 Georgia,serif;letter-spacing:-.027em;margin:8px 0 12px}
+.hero p{max-width:690px;margin:0;color:#d0e3d6;font-size:14px}
+.tuning{border:1px solid #567266;border-radius:12px;padding:12px 15px;color:#dfecde;white-space:nowrap;font-size:12px;text-align:center}
+.tuning b{display:block;font-size:15px;letter-spacing:.07em;color:#fff}
+.main{margin-top:-21px;padding-bottom:42px;position:relative}
+.controls{display:grid;grid-template-columns:minmax(0,.94fr) minmax(0,1.06fr);gap:16px;align-items:stretch}
+.panel{background:var(--surface);border-radius:var(--radius);border:1px solid #e3eae4;box-shadow:0 8px 30px #19312d0a;padding:24px;min-width:0}
+.step-title{display:flex;align-items:center;gap:9px;font-weight:800;font-size:17px;letter-spacing:-.01em;margin:0 0 13px}
+.step{width:26px;height:26px;flex:none;border-radius:8px;display:grid;place-items:center;font-size:12px;background:var(--soft);color:var(--green)}
+.selector{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.choice{display:flex;flex-direction:column;justify-content:center;text-align:left;min-width:0;gap:7px;border:1.5px solid var(--line);border-radius:13px;background:#fbfcfa;padding:13px;min-height:97px;color:var(--ink)}
+.choice[aria-pressed=true]{background:var(--soft);border-color:#5eae8a;box-shadow:inset 0 0 0 1px #5eae8a}
+.choice b{font-size:14px;line-height:1.22}.choice small{font-size:11px;line-height:1.42;color:var(--muted)}
+.direction .choice b{font-size:14px}.arrow{color:var(--green);font-weight:850}
+.section-space{margin-top:21px}
+.hint{color:var(--muted);font-size:12px;line-height:1.5;margin:9px 0 0}
+.callout{font-size:12px;line-height:1.55;padding:11px 12px;background:#f3f8f4;border-radius:11px;border:1px solid #dde9de;margin:14px 0 0}
+.compose{min-width:0}label.field{font-size:13px;font-weight:750;display:block;margin-bottom:8px}
+textarea{resize:vertical;width:100%;min-height:111px;max-height:240px;padding:15px;border-radius:13px;border:1.5px solid #c9d9ce;background:white;font-weight:700;letter-spacing:.025em;font-size:19px;color:var(--ink)}
+textarea:focus{border-color:var(--green);outline:3px solid #d3eadd}
+.quick{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:12px}
+.quick .label{color:var(--muted);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin-right:3px}
+.quick button{background:#fff;border:1px solid var(--line);border-radius:99px;padding:6px 11px;font-size:12px;color:var(--ink)}.quick button:hover{background:var(--soft);border-color:#9bc7ac}
+.builder{margin-top:19px;padding-top:18px;border-top:1px solid var(--line)}
+.builder-title{font-size:13px;font-weight:800;margin:0 0 10px}
+.builder-line{display:grid;grid-template-columns:minmax(65px,.7fr) minmax(110px,1.3fr) auto;gap:7px}
+select{height:43px;padding:0 8px;border:1px solid #c9d9ce;border-radius:10px;background:white;min-width:0;color:var(--ink);font-size:13px}
+.primary{border:0;border-radius:10px;background:var(--green);color:white;min-height:42px;padding:9px 14px;font-size:12px;font-weight:800}.primary:hover{background:var(--green2)}.primary:disabled{opacity:.5;cursor:not-allowed}
+.text-button{border:0;background:none;text-decoration:underline;text-underline-offset:3px;color:var(--green);font-size:12px;padding:6px 0}
+.builder-bottom{display:flex;justify-content:space-between;gap:10px;margin-top:10px;flex-wrap:wrap}
+.summary{margin-top:16px;background:var(--surface);border:1px solid #e3eae4;border-radius:var(--radius);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.summary-top{font-size:12px;color:var(--muted);font-weight:750;margin:0 0 7px}.summary-context{font-size:12px;color:var(--muted);line-height:1.45;margin:8px 0 0}.summary-text{display:flex;flex-direction:column;align-items:stretch;gap:5px;min-height:40px}.summary-line{display:flex;gap:8px;align-items:center;flex-wrap:wrap;min-height:38px}.summary-line:empty{min-height:32px}
+.pill{background:var(--soft);color:var(--green2);border:1px solid #cbe4d5;border-radius:9px;font-weight:850;font-size:19px;padding:5px 10px;min-width:43px;text-align:center}
+.separator{color:#7b9b84;font-size:20px}
+.summary-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.status{font-size:12px;color:var(--green);font-weight:750;min-height:17px}
+.warning{margin:15px 0;background:#fff7ed;border:1px solid #efd3ae;border-radius:11px;padding:11px 14px;color:#7d482d;font-size:12px}
+.results{margin-top:28px}
+.results-title{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:15px}
+h2{margin:0 0 4px;font-size:24px;letter-spacing:-.025em}.results-title p{margin:0;color:var(--muted);font-size:12px}
+.legend{padding:9px 12px;border:1px solid var(--line);background:white;border-radius:10px;font-size:11px;color:var(--muted)}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.chord-card{background:var(--surface);border:1px solid #e0e9e1;border-radius:18px;padding:16px;min-width:0;box-shadow:0 7px 18px #19312d08}
+.card-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:11px}
+.card-number{color:var(--muted);font-size:10px;font-weight:850;letter-spacing:.07em;text-transform:uppercase}
+.card-chord{font-size:22px;font-weight:850;letter-spacing:-.02em;color:var(--ink)}.card-chord span{color:var(--green)}
+.remove{border:0;background:#f2f5f2;color:#62756a;border-radius:9px;width:33px;height:33px;display:grid;place-items:center;font-size:20px;line-height:1}.remove:hover{background:#fbe9e4;color:var(--red)}
+.pair{display:grid;grid-template-columns:minmax(0,1fr) 23px minmax(0,1fr);gap:7px;align-items:start}
+.half{min-width:0;border:1px solid #e6ebe5;border-radius:13px;padding:11px 6px 9px;background:#fbfcfa;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:286px}
+.half.target{background:#edf7ef;border-color:#cde4d2}
+.small-role{text-transform:uppercase;letter-spacing:.08em;font-size:9px;font-weight:850;color:#75877b}.target .small-role{color:var(--green)}
+.instrument{color:var(--muted);font-size:10px;font-weight:700;text-align:center}
+.position-kicker{font-size:10px;letter-spacing:.045em;font-weight:800;color:var(--muted);margin-top:8px;text-align:center}.big-chord{font-size:30px;font-weight:850;line-height:1.1;letter-spacing:-.02em;margin:0 0 1px;overflow-wrap:anywhere;text-align:center}.target .big-chord{color:var(--green2)}.sound-label{font-size:11px;line-height:1.35;color:#4d675b;text-align:center;font-weight:750;margin-top:1px}.target .sound-label{color:#246f59}.position-source{font-size:11px;text-align:center;color:var(--muted);line-height:1.5}.card-headline-note{font-size:11px;color:var(--muted);font-weight:600;margin:3px 0 0}.position-result{font-weight:850;color:var(--green2)}
+.diagram-svg{width:100%;max-width:159px;height:auto;aspect-ratio:178/190;display:block;overflow:visible}
+.pair-arrow{text-align:center;display:flex;align-items:center;justify-content:center;padding-top:102px;color:#6b9885;font-size:24px;font-weight:700}
+.position{font-size:10px;text-align:center;color:#62776b;margin-top:auto;line-height:1.35;overflow-wrap:anywhere}
+.card-foot{color:var(--muted);font-size:11px;line-height:1.45;margin:10px 2px 0}
+.no-board{min-height:171px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:11px;color:#805d42;padding:8px}
+.linebreak{grid-column:1/-1;border-top:1px dashed #c7d9cc;margin-top:8px;padding-top:14px;color:#71897b;font-size:10px;text-transform:uppercase;letter-spacing:.12em;font-weight:850}.measure{grid-column:1/-1;display:flex;align-items:center;gap:12px;margin:4px 2px;font-size:10px;text-transform:uppercase;letter-spacing:.12em;font-weight:850;color:#6c8478}.measure:after{content:"";height:1px;flex:1;background:#d1ded4}
+.empty{background:#fff;border:1px dashed #b7cdbd;border-radius:15px;grid-column:1/-1;padding:40px;text-align:center;color:var(--muted);font-size:14px}
+.footnote{font-size:12px;color:var(--muted);line-height:1.6;margin:18px 0 0}
+.footer{padding:0 0 30px;color:var(--muted);font-size:11px}
+@media(max-width:960px){.controls{grid-template-columns:1fr}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.tuning{display:none}}
+@media(max-width:690px){.shell{width:min(100% - 24px,560px)}.hero{padding-bottom:37px}.hero-inner{padding-top:15px}h1{font-size:35px}.panel{padding:18px}.summary{padding:17px}.cards{grid-template-columns:1fr;gap:12px}.results{margin-top:24px}.half{min-height:288px}.choice{padding:11px;min-height:103px}.choice b{font-size:12px}.choice small{font-size:10px}.step-title{font-size:16px}.builder-line{grid-template-columns:.7fr 1.2fr auto}}
+@media(max-width:370px){.panel{padding:13px}.builder-line{grid-template-columns:.8fr 1.2fr}.builder-line .primary{grid-column:1/-1}.half{padding:8px 2px}.pair{gap:3px;grid-template-columns:minmax(0,1fr) 18px minmax(0,1fr)}.pair-arrow{font-size:18px}}
+@media print{body{background:white}.hero{background:none;color:#111;padding:5px 0}.hero p,.kicker,.brandmark,.tuning,.controls,.summary-actions,.remove,.footer,.legend{display:none!important}.hero-inner{padding:0}.main{margin:0}.summary{padding:8px 0;box-shadow:none;border:none}.cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.chord-card{break-inside:avoid;box-shadow:none;padding:10px}.half{min-height:205px}.diagram-svg{max-width:130px}h1{font-size:27px}.results{margin-top:10px}.footnote{font-size:10px}.shell{width:100%}}
+</style>
+</head>
+<body>
+<header class="hero"><div class="shell">
+ <div class="brand"><span class="brandmark" aria-hidden="true">♮</span> Accord / Bar</div>
+ <div class="hero-inner"><div><span class="kicker">Ukulélé standard et baryton</span><h1>Quel doigté jouer<br>sur l’autre ukulélé ?</h1><p>Retrouvez immédiatement le nom de la <strong>position que vous connaissez sur le standard</strong>, avec les deux diagrammes et l’accord entendu.</p></div><div class="tuning"><span>Standard <b>G · C · E · A</b></span><span style="color:#accab4">↕</span><span>Baryton <b>D · G · B · E</b></span></div></div>
+</div></header>
+<main class="shell main">
+ <div class="controls">
+  <section class="panel" aria-label="Réglages de conversion">
+    <h2 class="step-title"><span class="step">1</span> D'un ukulélé à l'autre</h2>
+    <div class="selector direction" role="group" aria-label="Sens de conversion">
+      <button class="choice" type="button" id="direction-stb" aria-pressed="true"><b>Standard <span class="arrow">→</span> Baryton</b><small>G · C · E · A vers D · G · B · E</small></button>
+      <button class="choice" type="button" id="direction-bts" aria-pressed="false"><b>Baryton <span class="arrow">→</span> Standard</b><small>D · G · B · E vers G · C · E · A</small></button>
+    </div>
+    <h2 class="step-title section-space"><span class="step">2</span> Que souhaitez-vous conserver ?</h2>
+    <div class="selector" role="group" aria-label="Type de correspondance">
+      <button class="choice" type="button" id="objective-sound" aria-pressed="true"><b>Le même accord entendu</b><small>La position à jouer change. Son identique.</small></button>
+      <button class="choice" type="button" id="objective-shape" aria-pressed="false"><b>La même position</b><small>Les cases restent identiques. Le son change.</small></button>
+    </div>
+    <p class="callout" id="mode-explanation">Pour entendre C sur le baryton, jouez la position F du standard (cases 2·0·1·0).</p>
+  </section>
+  <section class="panel compose" aria-label="Saisie de la progression">
+    <h2 class="step-title"><span class="step">3</span> Votre suite d'accords</h2>
+    <label class="field" for="progression" id="input-label">Accords entendus sur le standard</label>
+    <textarea id="progression" aria-describedby="notation-hint" spellcheck="false" autocomplete="off" autocapitalize="off">C Am F G7</textarea>
+    <p class="hint" id="notation-hint">Saisissez C Am F G7. Appuyez sur Entrée pour créer une nouvelle ligne, reproduite dans les résultats. Le symbole | sépare les mesures.</p>
+    <div class="quick"><span class="label">Exemples</span><button type="button" data-sequence="C Am F G7">C · Am · F · G7</button><button type="button" data-sequence="G D Em C">G · D · Em · C</button><button type="button" data-sequence="F Dm | Bb C7">F · Dm | Bb · C7</button></div>
+    <div class="builder"><p class="builder-title">Ajouter rapidement un accord</p><div class="builder-line"><select id="root" aria-label="Note de l'accord"><option>C</option><option>C#</option><option>Db</option><option>D</option><option>Eb</option><option>E</option><option>F</option><option>F#</option><option>Gb</option><option>G</option><option>Ab</option><option>A</option><option>Bb</option><option>B</option></select><select id="quality" aria-label="Type d'accord"><option value="">Majeur</option><option value="m">Mineur</option><option value="7">Septième</option><option value="m7">Mineur 7</option><option value="maj7">Majeur 7</option><option value="sus2">Sus2</option><option value="sus4">Sus4</option><option value="dim">Diminué</option><option value="aug">Augmenté</option><option value="6">Sixième</option><option value="m6">Mineur 6</option><option value="add9">Add9</option><option value="9">Neuvième</option><option value="7sus4">7sus4</option><option value="dim7">Dim7</option><option value="m7b5">Demi-diminué</option></select><button class="primary" type="button" id="add">+ Ajouter</button></div><div class="builder-bottom"><button class="text-button" type="button" id="add-measure">+ Barre de mesure |</button><button class="text-button" type="button" id="clear">Effacer</button></div></div>
+  </section>
+ </div>
+ <section class="summary" aria-label="Progression convertie"><div><p class="summary-top" id="summary-title">POSITIONS DU STANDARD À REPRODUIRE SUR LE BARYTON</p><div class="summary-text" id="converted" aria-live="polite"></div><p class="summary-context" id="summary-context">Les accords entendus restent : C · Am · F · G7.</p></div><div class="summary-actions"><button type="button" class="primary" id="copy">Copier les positions</button><button type="button" class="text-button" id="print">Imprimer</button><span class="status" id="copy-status" role="status" aria-live="polite"></span></div></section>
+ <div class="warning" id="warning" role="alert" hidden></div>
+ <section class="results" aria-labelledby="results-title"><div class="results-title"><div><h2 id="results-title">Les positions, côte à côte</h2><p id="description">À gauche, la position de départ. À droite, la position à reproduire, nommée comme sur un ukulélé standard.</p></div><div class="legend">● Case appuyée · ○ Corde à vide · × Corde muette</div></div><div class="cards" id="cards" aria-live="polite"></div><p class="footnote">Les schémas montrent les cordes de gauche à droite (standard : G–C–E–A ; baryton : D–G–B–E). Le nom « Position F » signifie : reproduisez le doigté de F appris sur le standard. Les formes montrées sont des doigtés possibles, parfois différents des formes habituelles. Un accordage standard avec sol aigu ou sol grave modifie les octaves, pas les noms des accords. Pour les accords avec basse indiquée (ex. C/E), les noms sont convertis mais aucun diagramme d'inversion n'est garanti.</p></section>
+</main>
+<footer class="shell footer">Accord / Bar · Une application HTML autonome qui fonctionne hors connexion.</footer>
+<script>
+(() => {'use strict';
+const $ = id => document.getElementById(id);
+const PC={C:0,'C#':1,Db:1,D:2,'D#':3,Eb:3,E:4,F:5,'F#':6,Gb:6,G:7,'G#':8,Ab:8,A:9,'A#':10,Bb:10,B:11};
+const SHARP=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const FLAT=['C','Db','D','Eb','E','F','Gb','G','Ab','A','Bb','B'];
+const NEUTRAL=['C','C#','D','Eb','E','F','F#','G','Ab','A','Bb','B'];
+const TUNING={standard:[7,0,4,9],baryton:[2,7,11,4]};
+const STRINGS={standard:['G','C','E','A'],baryton:['D','G','B','E']};
+const FORMULAS={'':[0,4,7],m:[0,3,7],7:[0,4,7,10],m7:[0,3,7,10],maj7:[0,4,7,11],sus2:[0,2,7],sus4:[0,5,7],dim:[0,3,6],aug:[0,4,8],6:[0,4,7,9],m6:[0,3,7,9],add9:[0,2,4,7],9:[0,2,4,10],'7sus4':[0,5,7,10],dim7:[0,3,6,9],m7b5:[0,3,6,10]};
+// Formes courantes du standard, dans l'ordre G-C-E-A, du do au si.
+const COMMON={
+'':['0003','1114','2220','3331','4442','2010','3121','0232','1343','2100','3211','4322'],
+m:['0333','1104','2210','3321','0432','1013','2120','0231','1342','2000','3111','4222'],
+7:['0001','1112','2223','3334','1202','2313','3424','0212','1323','0100','1211','2322'],
+m7:['3333','1102','2213','3324','0202','1313','2424','0211','1322','0000','1111','2222'],
+maj7:['0002','1113','2224','3335','4446','2413','3524','0222','1333','1100','3210','4321']};
+const SPECIAL={min:'m',min7:'m7',M7:'maj7',Maj7:'maj7','Δ7':'maj7','°':'dim','°7':'dim7','+':'aug','ø':'m7b5','ø7':'m7b5','m7♭5':'m7b5'};
+let direction='standard',objective='sound',clipboard='';
+const shapeCache=new Map(),input=$('progression');
+function el(tag,className,text){const n=document.createElement(tag);if(className)n.className=className;if(text!==undefined)n.textContent=text;return n}
+function pc(v){return (v%12+12)%12}
+function spell(raw,n){return (raw.includes('b')?FLAT:raw.includes('#')?SHARP:NEUTRAL)[pc(n)]}
+function transpose(note,by){return spell(note,PC[note]+by)}
+function parse(token){
+ const m=/^([A-Ga-g])([#b♯♭]?)(.*)$/.exec(token);if(!m)return null;
+ const root=m[1].toUpperCase()+m[2].replace('♯','#').replace('♭','b');let tail=m[3],bass=null;
+ const match=/\/([A-Ga-g])([#b♯♭]?)$/.exec(tail);
+ if(match){bass=match[1].toUpperCase()+match[2].replace('♯','#').replace('♭','b');tail=tail.slice(0,-match[0].length)}
+ const quality=Object.prototype.hasOwnProperty.call(SPECIAL,tail)?SPECIAL[tail]:tail;
+ if(PC[root]===undefined||(bass&&PC[bass]===undefined)||!Object.prototype.hasOwnProperty.call(FORMULAS,quality))return null;
+ return {root,quality,suffix:tail,bass,raw:token};
+}
+function name(chord,root=chord.root,bass=chord.bass){return root+chord.suffix+(bass?'/'+bass:'')}
+function shapeName(instrument,root,suffix,bass){
+ // La même position produit un accord une quarte plus haut sur le standard
+ // que sur le baryton : +5 demi-tons, en conservant la qualité de l'accord.
+ const delta=instrument==='baryton'?5:0;
+ return transpose(root,delta)+suffix+(bass?'/'+transpose(bass,delta):'');
+}
+function tokenize(){return input.value.replace(/\r\n?/g,'\n').match(/\n|\||[^\s,;|]+/g)||[]}
+function untokenize(tokens){
+ const lines=[''];
+ tokens.forEach(token=>{
+  if(token==='\n')lines.push('');
+  else{const i=lines.length-1;lines[i]+=(lines[i]?' ':'')+token}
+ });
+ return lines.join('\n');
+}
+function convert(token,index){
+ if(token==='\n')return {kind:'linebreak',raw:token,index};
+ if(token==='|')return {kind:'measure',raw:token,index};
+ const c=parse(token);if(!c)return {kind:'bad',raw:token,index};
+ const source=direction,target=source==='standard'?'baryton':'standard';
+ // Mode « accord » : l'entrée est le SON attendu sur l'instrument de départ.
+ // Mode « position » : l'entrée est le NOM DU DOIGTÉ appris sur le standard,
+ // même si l'instrument de départ est un baryton.
+ const sourceRoot=objective==='sound'?c.root:transpose(c.root,source==='baryton'?-5:0);
+ const sourceBass=c.bass?(objective==='sound'?c.bass:transpose(c.bass,source==='baryton'?-5:0)):null;
+ const outRoot=objective==='sound'?sourceRoot:transpose(c.root,target==='baryton'?-5:0);
+ const outBass=c.bass?(objective==='sound'?sourceBass:transpose(c.bass,target==='baryton'?-5:0)):null;
+ const sourceHeard=name(c,sourceRoot,sourceBass),result=name(c,outRoot,outBass);
+ const sourceShape=findShape(source,sourceRoot,c.quality,sourceBass);
+ const targetShape=objective==='shape'?sourceShape:findShape(target,outRoot,c.quality,outBass);
+ // Chaque position porte le nom du doigté tel que joué sur le standard.
+ const sourcePosition=shapeName(source,sourceRoot,c.suffix,sourceBass);
+ const targetPosition=shapeName(target,outRoot,c.suffix,outBass);
+ return {kind:'chord',raw:token,index,source,target,outRoot,outBass,sourceHeard,result,sourceShape,targetShape,sourcePosition,targetPosition,slash:!!c.bass};
+}
+function valid(shape,tuning,pitch,quality){
+ const intervals=FORMULAS[quality],tones=new Set(intervals.map(i=>pc(pitch+i)));
+ const heard=new Set(shape.map((f,i)=>f<0?null:pc(tuning[i]+f)).filter(v=>v!==null));
+ return [...heard].every(p=>tones.has(p))&&[...tones].every(p=>heard.has(p));
+}
+function findShape(inst,root,quality,bass){
+ if(bass)return null;const p=PC[root],cacheKey=inst+':'+p+':'+quality;
+ if(shapeCache.has(cacheKey))return shapeCache.get(cacheKey);
+ const tuning=TUNING[inst],intervals=FORMULAS[quality],tones=new Set(intervals.map(i=>pc(p+i)));
+ let best=null;
+ // Le même diagramme de base sur le baryton équivaut à l'accord cinq demi-tons au-dessus sur le standard.
+ const standardPitch=pc(p+(inst==='baryton'?5:0));
+ if(COMMON[quality]&&COMMON[quality][standardPitch]){
+   const known=COMMON[quality][standardPitch].split('').map(Number);
+   if(valid(known,tuning,p,quality))best=known;
+ }
+ if(!best){
+   const opts=tuning.map(base=>[-1,...Array.from({length:10},(_,f)=>f).filter(f=>tones.has(pc(base+f)))]);
+   let bestScore=Infinity;
+   for(const a of opts[0])for(const b of opts[1])for(const c of opts[2])for(const d of opts[3]){
+     const fs=[a,b,c,d];if(!valid(fs,tuning,p,quality))continue;
+     const sounding=fs.filter(f=>f>=0);if(sounding.length<Math.min(3,tones.size))continue;
+     const pressed=sounding.filter(f=>f>0),spread=pressed.length?Math.max(...pressed)-Math.min(...pressed):0;
+     if(spread>3)continue;
+     const high=Math.max(...sounding),low=pressed.length?Math.min(...pressed):0,muted=fs.filter(f=>f<0).length,open=fs.filter(f=>f===0).length;
+     const score=high*2.8+spread*1.9+muted*5.5+low*.45-open*1.6+pressed.length*.08;
+     if(score<bestScore){bestScore=score;best=fs}
+   }
+ }
+ shapeCache.set(cacheKey,best);return best;
+}
+function svg(tag,props={}){const n=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const [k,v] of Object.entries(props))n.setAttribute(k,String(v));return n}
+function diagram(shape,inst,chord){
+ const board=svg('svg',{viewBox:'0 0 178 190',class:'diagram-svg',role:'img','aria-label':`Diagramme ${chord} pour ukulélé ${inst==='standard'?'standard':'baryton'} : ${shape.map(n=>n===-1?'muette':n).join(', ')}`});
+ const ink='#607b6a',string='#a0b3a5',accent=inst==='baryton'?'#116b59':'#254338',x=[35,71,107,143];
+ const pos=shape.filter(n=>n>0);const start=Math.max(1,Math.max(1,...pos)>4?Math.min(...pos):1);
+ STRINGS[inst].forEach((note,i)=>{const t=svg('text',{x:x[i],y:14,fill:ink,'font-size':12,'font-weight':800,'text-anchor':'middle'});t.textContent=note;board.append(t);
+ board.append(svg('line',{x1:x[i],x2:x[i],y1:48,y2:164,stroke:string,'stroke-width':1.4}));});
+ for(let i=0;i<5;i++)board.append(svg('line',{x1:35,x2:143,y1:48+i*29,y2:48+i*29,stroke:i===0&&start===1?'#344d3f':string,'stroke-width':i===0&&start===1?4:1.3}));
+ if(start>1){const txt=svg('text',{x:23,y:66,fill:ink,'font-size':11,'font-weight':750,'text-anchor':'end'});txt.textContent=start;board.append(txt)}
+ shape.forEach((f,i)=>{
+ if(f===-1){const t=svg('text',{x:x[i],y:38,fill:ink,'font-size':17,'font-weight':800,'text-anchor':'middle'});t.textContent='×';board.append(t)}
+ else if(f===0)board.append(svg('circle',{cx:x[i],cy:32,r:6,stroke:accent,'stroke-width':2,fill:'#fff'}));
+ else board.append(svg('circle',{cx:x[i],cy:48+(f-start+.5)*29,r:9.2,fill:accent}));
+ });
+ const footer=svg('text',{x:89,y:185,fill:ink,'font-size':11,'font-weight':700,'text-anchor':'middle','letter-spacing':'.08em'});footer.textContent=shape.map(f=>f===-1?'×':String(f)).join('  ');board.append(footer);
+ return board;
+}
+function half(inst,chord,positionName,shape,isTarget){
+ const container=el('div','half'+(isTarget?' target':''));
+ container.append(el('div','small-role',isTarget?'À JOUER SUR':'DÉPART SUR'));
+ container.append(el('div','instrument',inst==='standard'?'STANDARD · G C E A':'BARYTON · D G B E'));
+ container.append(el('div','position-kicker','POSITION DU STANDARD'));
+ container.append(el('div','big-chord',positionName));
+ container.append(el('div','sound-label','Accord entendu : '+chord));
+ if(shape)container.append(diagram(shape,inst,chord));
+ else container.append(el('div','no-board','Diagramme non garanti pour cette forme d’accord.'));
+ container.append(el('div','position',shape?'Cases : '+shape.map(n=>n<0?'×':n).join(' · '):'Doigté à vérifier'));
+ return container;
+}
+function card(item,ordinal){
+ const box=el('article','chord-card');const head=el('div','card-head');const title=el('div');
+ title.append(el('div','card-number','ACCORD '+String(ordinal).padStart(2,'0')));
+ const nameLine=el('div','card-chord');
+ if(objective==='sound'){
+   nameLine.append(document.createTextNode(item.raw+' → '));
+   nameLine.append(el('span','', 'Position '+item.targetPosition));
+   title.append(nameLine,el('p','card-headline-note','Accord entendu sur les deux instruments : '+item.result));
+ } else {
+   nameLine.append(document.createTextNode('Position '+item.sourcePosition+' → '));
+   nameLine.append(el('span','', 'Son '+item.result));
+   title.append(nameLine,el('p','card-headline-note','Sur le '+item.source+', cette position produit '+item.sourceHeard));
+ }
+ const deleteButton=el('button','remove','×');deleteButton.type='button';deleteButton.title='Supprimer cet accord';deleteButton.setAttribute('aria-label','Supprimer '+item.raw);
+ deleteButton.addEventListener('click',()=>{const ts=tokenize();ts.splice(item.index,1);input.value=untokenize(ts);render()});
+ head.append(title,deleteButton);box.append(head);
+ const pair=el('div','pair');
+ pair.append(half(item.source,item.sourceHeard,item.sourcePosition,item.sourceShape,false),el('div','pair-arrow','→'),half(item.target,item.result,item.targetPosition,item.targetShape,true));
+ box.append(pair);
+ const text=objective==='sound'?'Pour garder le même accord entendu, reproduisez sur l’instrument cible la position indiquée à droite.':'En conservant les mêmes cases, la position garde son nom de référence, mais l’accord entendu change.';
+ box.append(el('p','card-foot',item.slash?'La basse indiquée est transposée, mais le renversement n’est pas vérifié.':text));
+ return box;
+}
+function updateIntro(){
+ const stb=direction==='standard',same=objective==='sound';
+ $('direction-stb').setAttribute('aria-pressed',String(stb));$('direction-bts').setAttribute('aria-pressed',String(!stb));
+ $('objective-sound').setAttribute('aria-pressed',String(same));$('objective-shape').setAttribute('aria-pressed',String(!same));
+ const src=stb?'standard':'baryton',dest=stb?'baryton':'standard';
+ $('input-label').textContent=same?'Accords que vous souhaitez entendre sur le '+src:'Noms des positions que vous connaissez sur le standard';
+ $('summary-title').textContent=same
+  ?'POSITIONS DU STANDARD À REPRODUIRE SUR LE '+dest.toUpperCase()
+  :'ACCORDS ENTENDUS SUR LE '+dest.toUpperCase();
+ $('copy').textContent=same?'Copier les positions':'Copier les accords';
+ $('description').textContent='À gauche : position sur le '+src+'. À droite : position sur le '+dest+'. Chaque position porte le nom du doigté tel que vous le connaissez sur le standard.';
+ const example=stb
+   ?(same?'Pour entendre C sur le baryton, jouez la position F du standard : cases 2 · 0 · 1 · 0.':'Jouez la position C sur le standard : elle sonne C. Sur le baryton, les mêmes cases produisent G.')
+   :(same?'Pour entendre C sur le standard, jouez la position C. Sur le baryton, ce même C s’obtient avec la position F du standard.':'Jouez la position C sur le baryton : elle sonne G. Sur le standard, les mêmes cases produisent C.');
+ $('mode-explanation').textContent=example;
+}
+function render(){
+ updateIntro();const converted=tokenize().map(convert),success=converted.filter(c=>c.kind==='chord'),bad=converted.filter(c=>c.kind==='bad');
+ const output=$('converted');output.replaceChildren();
+ if(!converted.length)output.append(el('span','hint','Ajoutez un accord pour afficher les diagrammes.'));
+ else {
+  let line=el('div','summary-line');output.append(line);
+  converted.forEach(c=>{
+   if(c.kind==='linebreak'){line=el('div','summary-line');output.append(line)}
+   else line.append(el('span',c.kind==='measure'?'separator':'pill',c.kind==='measure'?'|':c.kind==='bad'?'?':objective==='sound'?c.targetPosition:c.result));
+  });
+ }
+ clipboard=untokenize(converted.map(c=>c.kind==='linebreak'?'\n':c.kind==='measure'?'|':c.kind==='bad'?`[${c.raw} ?]`:objective==='sound'?c.targetPosition:c.result));
+ const sequence=success.map(c=>objective==='sound'?c.result:c.sourceHeard).join(' · ');
+ $('summary-context').textContent=objective==='sound'
+    ?'Accords réellement entendus (inchangés) : '+(sequence||'aucun')+'.'
+    :'Accords entendus sur l’instrument de départ : '+(sequence||'aucun')+'.';
+ $('copy').disabled=!success.length||bad.length>0;
+ $('copy-status').textContent='';
+ $('warning').hidden=bad.length===0;
+ if(bad.length)$('warning').textContent='Accord non reconnu : '+bad.map(c=>c.raw).join(', ')+'. Utilisez les noms internationaux C, D, E… avec des variantes comme m, 7, maj7 ou sus4.';
+ const container=$('cards');container.replaceChildren();
+ if(!converted.length){container.append(el('div','empty','Vos deux diagrammes apparaîtront ici dès que vous ajouterez un accord.'));return}
+ let ordinal=0,measure=1,lineNumber=1;
+ converted.forEach(c=>{
+ if(c.kind==='linebreak'){lineNumber++;container.append(el('div','linebreak','LIGNE '+lineNumber))}
+ else if(c.kind==='measure'){measure++;container.append(el('div','measure','MESURE '+measure))}
+ else if(c.kind==='bad')container.append(el('div','warning','Accord « '+c.raw+' » non reconnu.'));
+ else container.append(card(c,++ordinal));
+ });
+}
+async function copy(){if($('copy').disabled)return;let done=false;
+ try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(clipboard);done=true}}catch(e){}
+ if(!done){const temp=el('textarea','',clipboard);temp.style.cssText='position:absolute;left:-9999px;opacity:0';document.body.append(temp);temp.select();try{done=document.execCommand('copy')}catch(e){}temp.remove()}
+ $('copy-status').textContent=done?'Copié !':'Copie indisponible sur ce navigateur.';
+}
+function add(value){const previous=input.value;input.value=previous+(previous&&!/\s$/.test(previous)?' ':'')+value;render();input.focus();input.setSelectionRange(input.value.length,input.value.length)}
+$('direction-stb').addEventListener('click',()=>{direction='standard';render()});
+$('direction-bts').addEventListener('click',()=>{direction='baryton';render()});
+$('objective-sound').addEventListener('click',()=>{objective='sound';render()});
+$('objective-shape').addEventListener('click',()=>{objective='shape';render()});
+input.addEventListener('input',render);
+document.querySelectorAll('[data-sequence]').forEach(btn=>btn.addEventListener('click',()=>{input.value=btn.dataset.sequence;render()}));
+$('add').addEventListener('click',()=>add($('root').value+$('quality').value));
+$('add-measure').addEventListener('click',()=>add('|'));
+$('clear').addEventListener('click',()=>{input.value='';render();input.focus()});
+$('copy').addEventListener('click',copy);
+$('print').addEventListener('click',()=>window.print());
+render();
+window.__accordBarTest={convert,findShape,setMode:(d,o)=>{direction=d;objective=o;render()},tokenize};
+})();
+</script>
+</body>
+</html>
